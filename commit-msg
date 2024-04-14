@@ -1,0 +1,86 @@
+#!/bin/sh
+
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(cat $COMMIT_MSG_FILE)
+
+TITLE=$(echo "$COMMIT_MSG" | awk 'NR==1{print $0}')
+BODY=$(echo "$COMMIT_MSG" | awk 'NR>1{print}')
+
+TYPE=$(echo $TITLE | cut -d':' -f1)
+MESSAGE=$(echo $TITLE | cut -d':' -f2-)
+
+TYPE_LOWER=$(echo $TYPE | tr '[:upper:]' '[:lower:]')
+
+case $TYPE_LOWER in
+  feat)
+    EMOJI="✨"
+    ;;
+  implement)
+    EMOJI="🎨"
+    ;;
+  experiment)
+    EMOJI="🐧"
+    ;;
+  improve)
+    EMOJI="⚡️"
+    ;;
+  performance)
+    EMOJI="⚡️"
+    ;;
+  style)
+    EMOJI="🛠️"
+    ;;
+  design)
+    EMOJI="💄"
+    ;;
+  chore)
+    EMOJI="👷"
+    ;;
+  add)
+    EMOJI="➕"
+    ;;
+  use)
+    EMOJI="📦"
+    ;;
+  refactor)
+    EMOJI="♻️"
+    ;;
+  update)
+    EMOJI="♻️"
+    ;;
+  move)
+    EMOJI="🚚"
+    ;;
+  comment)
+    EMOJI="💡"
+    ;;
+  infra)
+    EMOJI="🧱"
+    ;;
+  wip)
+    EMOJI="🚧"
+    ;;
+  remove)
+    EMOJI="🔥"
+    ;;
+  fix)
+    EMOJI="🐛"
+    ;;
+  hotfix)
+    EMOJI="🚑"
+    ;;
+  docs)
+    EMOJI="📝"
+    ;;
+  merge)
+    EMOJI="🔀"
+    ;;
+  revert)
+    EMOJI="⏪"
+    ;;
+esac
+
+FORMATTED_TYPE=$(echo ${TYPE_LOWER:0:1} | tr '[:lower:]' '[:upper:]')$(echo ${TYPE_LOWER:1} | tr '[:upper:]' '[:lower:]')
+
+echo "${EMOJI} ${FORMATTED_TYPE}:${MESSAGE}\n${BODY}" > $COMMIT_MSG_FILE
+
